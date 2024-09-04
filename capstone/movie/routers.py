@@ -18,16 +18,6 @@ movie_router = APIRouter(
     tags= ["Movie"]
 )
 
-@movie_router.post("/", response_model = Movie, status_code = status.HTTP_201_CREATED)
-def list_movie(db : db_dependency, payload : CreateMovie, current_user : Login = Depends(get_current_user)):
-
-    """
-    ## Listing a movie
-    This requires the folowing
-    - title : str
-    - description : str
-    """
-    return crud.list_movie(db , payload , current_user)
 
 @movie_router.get("/", response_model= list[Movie])
 def fetch_movies(db : db_dependency):
