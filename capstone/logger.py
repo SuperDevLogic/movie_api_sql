@@ -9,8 +9,8 @@ logging_integration = LoggingIntegration(
     event_level=logging.ERROR  # Send errors as events
 )
 
-PAPERTRAIL_HOST = "logs6.papertrailapp.com"
-PAPERTRAIL_PORT =  13596
+PAPERTRAIL_HOST = "logs2.papertrailapp.com"
+PAPERTRAIL_PORT =  28987 
 
 handler = SysLogHandler(address=(PAPERTRAIL_HOST, PAPERTRAIL_PORT))
 
