@@ -18,6 +18,13 @@ movie_router = APIRouter(
     tags= ["Movie"]
 )
 
+@movie_router.post("/", response_model = Movie, status_code=status.HTTP_201_CREATED)
+def create_movie(db : db_dependency, payload : CreateMovie, current_user : Login = Depends(get_current_user)):
+    """
+    ## Create a movie
+    This creates a movie and can only be executed by the owner
+    """
+    return crud.create_movie(db, payload, current_user)
 
 @movie_router.get("/", response_model= list[Movie])
 def fetch_movies(db : db_dependency):
@@ -53,13 +60,13 @@ def delete_movie(db : db_dependency, id : int, current_user : Login = Depends(ge
     """
     return crud.delete_movie(db, id, current_user)
 
-@movie_router.get("/search/{title}", response_model= list[Movie])
-def search_movie(db : db_dependency, title : str):
-    """
-    ## Search for a movie by title
-    This searches for movies by their title and can be accessed by the public
-    """
-    return crud.search_movie(db, title)
+# @movie_router.get("/search/{title}", response_model= list[Movie])
+# def search_movie(db : db_dependency, title : str):
+#     """
+#     ## Search for a movie by title
+#     This searches for movies by their title and can be accessed by the public
+#     """
+#     return crud.fetch_movies(db, title)
 
 @movie_router.post("/{movie_id}/rate", status_code= status.HTTP_201_CREATED)
 def rate_movie(db : db_dependency, payload : RatingSchema, current_user : Login = Depends(get_current_user)):

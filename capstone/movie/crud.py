@@ -15,22 +15,16 @@ from capstone.movie.schema import ReplyComment
 
 from capstone.logger import get_logger
 
-# Enable sending logs from the standard Python logging module to Sentry
+
 
 
 logger = get_logger(__name__)
 
 
-def list_movie(db : db_dependency, payload : CreateMovie, current_user : Login = Depends(get_current_user)):
+def create_movie(db : db_dependency, payload : CreateMovie, current_user : Login = Depends(get_current_user)):
     logger.info(f"User {current_user.username} is attempting to list a new movie: {payload.title}")
     user = db.query(User).filter(User.username == current_user.username).first()
-    db_description = db.query(Movie_model).filter(Movie_model.description == payload.description).first()
-    if db_description:  # If a matching movie is found, raise a 406 error
-        logger.warning("Listing failed for user, A movie with a similar description already exists.")
-        raise HTTPException(
-                status_code=status.HTTP_406_NOT_ACCEPTABLE,
-                detail="Similar Movie already exists, Contact Support to make complaints."
-            )
+
     new_movie = Movie_model(
     title=payload.title,
     description=payload.description,
@@ -197,7 +191,7 @@ def get_ratings(db : db_dependency, movie_id : int):
         # Calculate the sum of rating values and the number of ratings
         total_rating = sum(rating_values)
         len_ratings = len(rating_values)
-        return total_rating, len_ratings
+        return ratings
         # return MovieService.average_rating(db, movie_id)
 
 
